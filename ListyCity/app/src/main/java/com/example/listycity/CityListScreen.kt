@@ -32,6 +32,7 @@ fun CityListScreen(
     cities: List<City>,
     onAddCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
+    onRemoveCity: (City) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var newCityName by remember { mutableStateOf("") }
@@ -40,6 +41,7 @@ fun CityListScreen(
     var selectedCity by remember { mutableStateOf<City?>(null) }
     var editedCityName by remember { mutableStateOf("") }
     var editedProvinceName by remember { mutableStateOf("") }
+    var showDeleteFields by remember { mutableStateOf(false)}
 
     Column(modifier = modifier.fillMaxSize()) {
         Row(
@@ -54,12 +56,38 @@ fun CityListScreen(
                         selectedCity = null
                         editedCityName = ""
                         editedProvinceName = ""
+                        showDeleteFields = false
                     }
                 }
             ) {
                 Text("+")
             }
+
+            FloatingActionButton(
+                modifier = Modifier.padding(16.dp),
+                onClick = {
+
+                    showDeleteFields = !showDeleteFields
+
+                    editedCityName = ""
+                    editedProvinceName = ""
+                    showAddCityFields = false
+
+                    if (showDeleteFields && selectedCity != null) {
+
+                        val cityToRemove = selectedCity
+                        if (cityToRemove != null) {
+                            onRemoveCity (cityToRemove)
+                        }
+                        selectedCity = null
+                    }
+                }
+            ) {
+                Text("Delete")
+            }
         }
+
+
         if (showAddCityFields) {
             Row(
                 modifier = Modifier
@@ -104,7 +132,8 @@ fun CityListScreen(
                 }
             }
         }
-        if (selectedCity != null) {
+        /* Edit Cities case **/
+        if (selectedCity != null && !showDeleteFields) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,6 +184,39 @@ fun CityListScreen(
                 }
             }
         }
+
+        /* change the screen when delete button is pressed **/
+        if (showDeleteFields){
+            if (selectedCity == null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = "Select City to Delete",
+                        fontSize = 25.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                }
+            }
+            else if (selectedCity != null) {
+                val tempCity = selectedCity
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = ("Delete: " + tempCity!!.name + " " + tempCity.province + "?"),
+                        fontSize = 25.sp,
+                        modifier = Modifier.weight(2f)
+                    )
+                }
+            }
+
+        }
+
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(cities) { index, city ->
                 CityRow(
@@ -173,6 +235,12 @@ fun CityListScreen(
                 }
             }
         }
+
+
+
+
+
+
     }
 }
 
@@ -213,7 +281,8 @@ fun CityListScreenPreview() {
                 City("Calgary", "AB")
             ),
             onAddCity = {},
-            onUpdateCity = { _, _ -> }
+            onUpdateCity = { _, _ -> },
+            onRemoveCity =  {}
         )
     }
 }

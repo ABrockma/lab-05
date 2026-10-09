@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464782754458",
+    "project_id": "citylister5",
+    "storage_bucket": "citylister5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464782754458:android:02e3f6e7d881875f601523",
+        "android_client_info": {
+          "package_name": "com.example.listycity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-h1w7Ye-HErv32HC5o_IaOjnOfC-_MMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
